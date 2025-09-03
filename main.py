@@ -1,15 +1,12 @@
 import asyncio
-from time import sleep
 import socketio
 from env import WEBUI_URL, TOKEN, MAP_CHANNEL_NAME_WORKFLOW
 from utils import send_message, send_typing, base64_to_pil, send_image
 from comfy import processComfy
 
-# Create an asynchronous Socket.IO client instance
 sio = socketio.AsyncClient(logger=False, engineio_logger=False)
 
 
-# Event handlers
 @sio.event
 async def connect():
     print("Connected!")
@@ -53,7 +50,6 @@ def events(user_id):
                     # raise
 
 
-# Define an async function for the main workflow
 async def main():
     try:
         print(f"Connecting to {WEBUI_URL}...")
@@ -76,8 +72,12 @@ async def main():
     await sio.wait()
 
 
-# Actually run the async `main` function using `asyncio`
+async def forever_main():
+    while True:
+        await main()
+        await asyncio.sleep(3)
+
+
 if __name__ == "__main__":
     while True:
-        asyncio.run(main())
-        sleep(3)
+        asyncio.run(main=forever_main())
