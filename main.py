@@ -25,6 +25,10 @@ def events(user_id):
             # Ignore events from the bot itself
             return
 
+        async def print_error(e):
+            print(e)
+            await send_message(channel_id=data["channel_id"], str(e))
+
         if data["data"]["type"] == "message":
             workflow = None
             if "channel" in data.keys():
@@ -37,16 +41,20 @@ def events(user_id):
                 image = None
                 try:
                     file = data["data"]["data"]["data"]["files"][0]
-                    image = base64_to_pil(file["url"])
+                    if file["type"] == "image":
+                        try:
+                            image = base64_to_pil(file["url"])
+                        except Exception as e:
+                            await print_error(e)
                 except IndexError:
                     pass
+
                 await send_message(data["channel_id"], "Processing...")
                 try:
                     newImage = await asyncio.to_thread(lambda: processComfy(workflow, prompt=prompt, image=image))
                     await send_image(data["channel_id"], "Done", newImage)
                 except Exception as e:
-                    print(e)
-                    await send_message(data["channel_id"], str(e))
+                    await print_error(e)
                     # raise
 
 
