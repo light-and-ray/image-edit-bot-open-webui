@@ -26,8 +26,9 @@ def events(user_id):
             return
 
         async def print_error(e):
-            print(e)
-            await send_message(data["channel_id"], str(e))
+            text = str(type(e).__name__) + ": " + str(e)
+            print(text)
+            await send_message(data["channel_id"], text)
 
         if data["data"]["type"] == "message":
             workflow = None

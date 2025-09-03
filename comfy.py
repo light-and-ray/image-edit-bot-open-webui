@@ -11,6 +11,9 @@ import requests
 
 client_id = str(uuid.uuid4())
 
+class ComfyUIException(Exception):
+    pass
+
 def queue_prompt(prompt, prompt_id):
     p = {"prompt": prompt, "client_id": client_id, "prompt_id": prompt_id}
     data = json.dumps(p).encode('utf-8')
@@ -41,6 +44,16 @@ def get_images(ws, prompt):
                     break #Execution is done
 
     history = get_history(prompt_id)[prompt_id]
+    status = history["status"]["status_str"]
+
+    if status == "error":
+        for message in history["status"]["messages"]:
+            if message[0] == "execution_error":
+                raise ComfyUIException(message[1]["exception_type"] + ": " + message[1]["exception_message"])
+    elif status != "success":
+        print(json.dumps(history["status"], indent=2))
+        raise Exception(f"Unknown ComfyUI status: {status}")
+
     for node_id in history['outputs']:
         node_output = history['outputs'][node_id]
         images_output = []
