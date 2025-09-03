@@ -1,7 +1,7 @@
 import asyncio
 import socketio
 from env import WEBUI_URL, TOKEN, MAP_CHANNEL_NAME_WORKFLOW
-from utils import send_message, send_typing, base64_to_pil, send_image
+from utils import send_message, send_typing, base64_url_to_pil, send_image
 from comfy import processComfy
 
 sio = socketio.AsyncClient(logger=False, engineio_logger=False)
@@ -44,7 +44,7 @@ def events(user_id):
                     file = data["data"]["data"]["data"]["files"][0]
                     if file["type"] == "image":
                         try:
-                            image = base64_to_pil(file["url"])
+                            image = base64_url_to_pil(file["url"])
                         except Exception as e:
                             await print_error(e)
                 except IndexError:

@@ -26,6 +26,7 @@ WEBUI_URL="..." # default http://localhost:8080
 TOKEN="..." # see below
 COMFY_ADDRESS="..." # default localhost:8188
 MAP_CHANNEL_NAME_WORKFLOW="..." #  see below
+LAZY_IMAGE_URLS=0 # default 0, see below
 ```
 
 ### TOKEN
@@ -35,3 +36,6 @@ Authentication and secure for ComfyUI connection is not supported. If you do it,
 
 ### MAP_CHANNEL_NAME_WORKFLOW
 This is a dictionary in json format that maps workflow and channel name. For example and by default `"{"qwen-image-edit": "qwen_image_edit.json"}"` means the bot will handle all messages from *"qwen-image-edit"* channel, send all user's requests there into *"workflows/qwen_image_edit.json"*. You can add channels and workflows how many you want
+
+### LAZY_IMAGE_URLS
+`0` means the bot will send images in base 64 format, `1` - will send url from Comfy's `/view?filename=...`. For the second choice comfy's address should be available from a client and Comfy server should be turned on

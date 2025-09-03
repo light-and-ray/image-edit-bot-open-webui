@@ -26,10 +26,12 @@ async def send_message(channel_id: str, message: str):
             return await response.json()
 
 
-async def send_image(channel_id: str, text: str, image: Image.Image):
+async def send_image(channel_id: str, text: str, image: Image.Image|str):
     url = f"{WEBUI_URL}/api/v1/channels/{channel_id}/messages/post"
     headers = {"Authorization": f"Bearer {TOKEN}"}
-    data = {"content": text, "data": {"files": [{"type": "image", "url": pil_to_base64(image)}]}}
+    if not isinstance(image, str):
+        image = pil_to_base64_url(image)
+    data = {"content": text, "data": {"files": [{"type": "image", "url": image}]}}
 
     async with aiohttp.ClientSession() as session:
         async with session.post(url, headers=headers, json=data) as response:
@@ -56,7 +58,7 @@ async def send_typing(sio: socketio.AsyncClient, channel_id: str):
     )
 
 
-def base64_to_pil(base64_url: str) -> Image.Image:
+def base64_url_to_pil(base64_url: str) -> Image.Image:
     """
     Converts a Base64-encoded data URL string to a PIL Image object.
 
@@ -98,7 +100,7 @@ def base64_to_pil(base64_url: str) -> Image.Image:
         raise Exception(f"Failed to open image from Base64 data: {e}")
 
 
-def pil_to_base64(pil_image: Image.Image, image_format: str = "PNG") -> str:
+def pil_to_base64_url(pil_image: Image.Image, image_format: str = "PNG") -> str:
     """
     Converts a PIL Image object to a Base64-encoded data URL string.
 

@@ -5,7 +5,7 @@ import urllib.request
 import urllib.parse
 from PIL import Image
 import io
-from env import COMFY_ADDRESS
+from env import COMFY_ADDRESS, LAZY_IMAGE_URLS
 from utils import get_image_hash
 import requests
 
@@ -23,7 +23,10 @@ def queue_prompt(prompt, prompt_id):
 def get_image(filename, subfolder, folder_type):
     data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
     url_values = urllib.parse.urlencode(data)
-    with urllib.request.urlopen("http://{}/view?{}".format(COMFY_ADDRESS, url_values)) as response:
+    url = "http://{}/view?{}".format(COMFY_ADDRESS, url_values)
+    if LAZY_IMAGE_URLS:
+        return url
+    with urllib.request.urlopen(url) as response:
         return response.read()
 
 def get_history(prompt_id):
@@ -125,8 +128,9 @@ def processComfy(workflowName: str, prompt: str = None, image: Image.Image = Non
     images = []
 
     for node_id in nodes:
-        for image_data in nodes[node_id]:
-            image = Image.open(io.BytesIO(image_data))
+        for image in nodes[node_id]:
+            if not LAZY_IMAGE_URLS:
+                image = Image.open(io.BytesIO(image))
             images.append(image)
 
     if len(images) < 1:
