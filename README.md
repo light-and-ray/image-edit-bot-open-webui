@@ -16,7 +16,7 @@ You can use the same environment that openwebui uses (it already has all depende
 - have a working comfy ui with your workflow. I assume you already have it
 - put text `prompt here` as a prompt (the bot will find the node by this text and replace it with proper prompt)
 - delete all preview image nodes and similar, you need to have only one image out
-- export it for API, and put the json file inside bot's `workflows/` directory
+- export it for API, and put the json file inside bot's `workflows/` directory. For example, `workflows/qwen_image_edit.json`
 - set up `.env` file: the most important are bot's token and mapping *channel name* -> *workflow name*
 - run the bot (`main.py`), openwebui and comfyui
 
@@ -31,5 +31,7 @@ MAP_CHANNEL_NAME_WORKFLOW="..." #  see below
 ### TOKEN
 To get it, log into bot's openwebui profile, go to `Settings` -> `Account` -> `API keys` -> `JWT Token`
 
+Authentication and secure for ComfyUI connection is not supported. If you do it, please make a PR
+
 ### MAP_CHANNEL_NAME_WORKFLOW
-This is a dictionary in json format that maps workflow and channel name. For example and by default `"{"qwen-image-edit": "qwen_image_edit"}"` means the bot will handle all messages from *"qwen-image-edit"* channel, send all user's requests there into *"workflows/qwen_image_edit.json"*. You can add channels and workflows how many you want
+This is a dictionary in json format that maps workflow and channel name. For example and by default `"{"qwen-image-edit": "qwen_image_edit.json"}"` means the bot will handle all messages from *"qwen-image-edit"* channel, send all user's requests there into *"workflows/qwen_image_edit.json"*. You can add channels and workflows how many you want

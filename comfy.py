@@ -56,6 +56,7 @@ def get_images(ws, prompt):
 def upload_image_to_comfy(pil_image: Image.Image, filename_prefix: str = "pil_upload"):
     if not isinstance(pil_image, Image.Image):
         return False, "Error: Input must be a Pillow Image object."
+    filename_prefix = filename_prefix.removesuffix(".json")
     url = f"http://{COMFY_ADDRESS}/upload/image"
     filename = f"{filename_prefix}_{get_image_hash(pil_image)}.png"
     image_stream = io.BytesIO()
@@ -77,7 +78,7 @@ def upload_image_to_comfy(pil_image: Image.Image, filename_prefix: str = "pil_up
 
 
 def processComfy(workflowName: str, prompt: str = None, image: Image.Image = None) -> Image.Image:
-    with open(f"workflows/{workflowName}.json") as f:
+    with open(f"workflows/{workflowName}") as f:
         workflow: dict = json.loads(f.read())
 
     for node in workflow.values():

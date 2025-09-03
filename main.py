@@ -1,4 +1,5 @@
 import asyncio
+from time import sleep
 import socketio
 from env import WEBUI_URL, TOKEN, MAP_CHANNEL_NAME_WORKFLOW
 from utils import send_message, send_typing, base64_to_pil, send_image
@@ -77,4 +78,6 @@ async def main():
 
 # Actually run the async `main` function using `asyncio`
 if __name__ == "__main__":
-    asyncio.run(main())
+    while True:
+        asyncio.run(main())
+        sleep(3)
