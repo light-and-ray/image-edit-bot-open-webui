@@ -1,6 +1,6 @@
 # Qwen/Flux Kontext Image edit (and not only) bot for Openwebui
 
-This is a simple bot for [openwebui](https://github.com/open-webui/open-webui) that allows you to create a channel-wrapper around any [ComfyUI](https://github.com/comfyanonymous/ComfyUI) workflow that has one prompt or one image input, and one image output
+This is a simple bot for [<s>open</s>closedwebui](https://github.com/open-webui/open-webui) that allows you to create a channel-wrapper around any [ComfyUI](https://github.com/comfyanonymous/ComfyUI) workflow that has one prompt or one image input, and one image output
 
 This repo is based on two examples: [open-webui/bot](https://github.com/open-webui/bot) and [websockets_api_example.py](https://github.com/comfyanonymous/ComfyUI/blob/master/script_examples/websockets_api_example.py)
 
